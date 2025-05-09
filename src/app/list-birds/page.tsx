@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 // import StuffItem from '@/components/StuffItem';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import authOptions from '@/lib/authOptions';
-import { Sighting } from '@prisma/client';
+import { Sighting, Comment } from '@prisma/client';
 import SightingCard from '@/components/SightingCard';
 
 declare module 'next-auth' {
@@ -34,6 +34,7 @@ const ListBirds = async () => {
       owner,
     },
   });
+  const comments: Comment[] = await prisma.comment.findMany();
   return (
     <main>
       <Container id="list" fluid className="py-3">
@@ -46,6 +47,7 @@ const ListBirds = async () => {
                   <Col key={sighting.id}>
                     <SightingCard
                       sighting={sighting}
+                      comments={comments.filter((comment) => comment.sightingId === sighting.id)}
                       currentUserEmail={session?.user?.email ?? null}
                       currentUserRole={session?.user?.role ?? null}
                     />

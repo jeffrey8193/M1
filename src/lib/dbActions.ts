@@ -128,8 +128,7 @@ export async function addSighting(
     userid: number;
     description: string;
     owner: string;
-    location: string;
-  },
+    location: string; },
 ) {
   console.log('Adding sighting');
   await prisma.sighting.create({
@@ -196,6 +195,25 @@ export async function createUser(credentials: { email: string; password: string 
       password,
     },
   });
+}
+
+/**
+ * Adds a new note to the database.
+ * @param note, object with the following properties: note, owner, contactId, createdAt.
+ */
+export async function addComment(
+  comment: { note: string; owner: string; sightingId: number },
+) {
+  await prisma.comment.create({
+    data: {
+      note: comment.note,
+      owner: comment.owner,
+      sightingId: comment.sightingId,
+      createdAt: new Date(),
+    },
+  });
+  // After adding, redirect to the list page
+  redirect('/list-all-sightings');
 }
 
 /**

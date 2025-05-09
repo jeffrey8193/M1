@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/authOptions';
 import { Col, Container, Row } from 'react-bootstrap';
-import { Sighting } from '@prisma/client';
+import { Sighting, Comment } from '@prisma/client';
 // eslint-disable-next-line import/extensions
 import SightingCard from '@/components/SightingCard';
 // eslint-disable-next-line import/extensions
@@ -13,6 +13,7 @@ const ListAllSightings = async () => {
 
   // Get all sightings regardless of user
   const sightings: Sighting[] = await prisma.sighting.findMany();
+  const comments: Comment[] = await prisma.comment.findMany();
 
   return (
     <main>
@@ -26,6 +27,7 @@ const ListAllSightings = async () => {
                   <Col>
                     <SightingCard
                       sighting={sighting}
+                      comments={comments.filter((comment) => comment.sightingId === sighting.id)}
                       currentUserEmail={session?.user?.email ?? null}
                       currentUserRole={session?.user?.role ?? null}
                     />

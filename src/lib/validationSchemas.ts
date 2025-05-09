@@ -57,3 +57,9 @@ export const EditSightingSchema = Yup.object({
   description: Yup.string().required(),
   owner: Yup.string().required(),
 });
+
+export const AddCommentSchema = Yup.object({
+  note: Yup.string().required(),
+  owner: Yup.string().required(),
+  sightingId: Yup.number().required(),
+});

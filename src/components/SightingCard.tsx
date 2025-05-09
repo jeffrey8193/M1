@@ -1,17 +1,21 @@
 'use client';
 
-import { Card, Image } from 'react-bootstrap';
+import { Card, Image, ListGroup } from 'react-bootstrap';
 import Link from 'next/link';
-import { Sighting } from '@prisma/client';
+import AddCommentForm from '@/components/AddCommentForm';
+import CommentItem from '@/components/CommentItem';
+import { Sighting, Comment } from '@prisma/client';
 
 /* Renders a single Sighting. See list-birds/page.tsx and list-all-sightings/page.tsx for usage.
   Added current user's role for edit / delete permissions */
 const SightingCard = ({
   sighting,
+  comments,
   currentUserEmail,
   currentUserRole,
 }: {
   sighting: Sighting;
+  comments: Comment[];
   currentUserEmail: string | null;
   currentUserRole: string | null;
 }) => {
@@ -27,8 +31,14 @@ const SightingCard = ({
       </Card.Header>
       <Card.Body>
         <Card.Text>{sighting.description}</Card.Text>
+        <ListGroup variant="flush">
+          {comments.map((comment) => (
+            <CommentItem key={comment.id} comment={comment} />
+          ))}
+        </ListGroup>
       </Card.Body>
       <Card.Footer>
+        <AddCommentForm sighting={sighting} />
         {canEditOrDelete && (
           <>
             <Link href={`edit/${sighting.id}`} className="me-3">Edit</Link>
